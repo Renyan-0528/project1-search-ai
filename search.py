@@ -88,7 +88,32 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # 1. 初始化栈 (LIFO) 用于 DFS
+    Frontier = util.Stack()
+    
+    # 2. 记录已访问的节点，避免死循环
+    Visited = []
+    
+    # 3. 压入初始状态：(当前位置, 到达这里的动作序列)
+    Frontier.push((problem.getStartState(), []))
+    
+    while not Frontier.isEmpty():
+        # 4. 从栈顶弹出一个节点（即当前最深的节点）
+        state, actions = Frontier.pop()
+        
+        # 5. 如果是目标节点，直接返回累积的动作序列
+        if problem.isGoalState(state):
+            return actions
+            
+        # 6. 如果该节点未被访问过，则进行扩展
+        if state not in Visited:
+            Visited.append(state) # 标记为已访问
+            
+            # 获取后继节点：(next_state, action, cost)
+            for next_state, action, cost in problem.getSuccessors(state):
+                # 如果后继节点未被访问过，将其与新的动作序列打包压入栈中
+                if next_state not in Visited:
+                    Frontier.push((next_state, actions + [action]))
 
 
 def breadthFirstSearch(problem):
